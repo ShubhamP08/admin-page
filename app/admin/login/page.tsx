@@ -45,16 +45,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      {/* Navbar Tabs */}
+      {/* Navbar Tabs
       <div className="flex space-x-6 mb-6 border-b border-muted-foreground">
-        <button
-          onClick={() => setActiveTab("student")}
-          className={`pb-2 text-lg font-semibold ${
-            activeTab === "student" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"
-          }`}
-        >
-          Student Login
-        </button>
         <button
           onClick={() => setActiveTab("admin")}
           className={`pb-2 text-lg font-semibold ${
@@ -63,7 +55,7 @@ export default function LoginPage() {
         >
           Admin Login
         </button>
-      </div>
+      </div> */}
 
       {/* Login Form */}
       <Card className="w-full max-w-md">
@@ -75,7 +67,7 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">UID</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
                 id="username"
                 type="text"
