@@ -1,16 +1,16 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-export default function AdminLogin() {
+export default function LoginPage() {
+  const [activeTab, setActiveTab] = useState<"student" | "admin">("student")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -22,29 +22,60 @@ export default function AdminLogin() {
     setIsLoading(true)
     setError("")
 
-    // Hardcoded credentials for now
-    if (username === "admin" && password === "admin123") {
-      // Set authentication in localStorage (simple approach for now)
-      localStorage.setItem("adminAuth", "true")
-      router.push("/admin/upload")
+    if (activeTab === "admin") {
+      // Hardcoded admin credentials
+      if (username === "admin" && password === "admin123") {
+        localStorage.setItem("adminAuth", "true")
+        router.push("/admin/upload")
+      } else {
+        setError("Invalid admin credentials")
+      }
     } else {
-      setError("Invalid username or password")
+      // Student login (for now just demo check)
+      if (username === "student" && password === "student123") {
+        localStorage.setItem("studentAuth", "true")
+        router.push("/student/dashboard")
+      } else {
+        setError("Invalid student credentials")
+      }
     }
 
     setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+      {/* Navbar Tabs */}
+      <div className="flex space-x-6 mb-6 border-b border-muted-foreground">
+        <button
+          onClick={() => setActiveTab("student")}
+          className={`pb-2 text-lg font-semibold ${
+            activeTab === "student" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"
+          }`}
+        >
+          Student Login
+        </button>
+        <button
+          onClick={() => setActiveTab("admin")}
+          className={`pb-2 text-lg font-semibold ${
+            activeTab === "admin" ? "border-b-2 border-primary text-primary" : "text-muted-foreground"
+          }`}
+        >
+          Admin Login
+        </button>
+      </div>
+
+      {/* Login Form */}
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>Access the Linguistic Chat Bot Admin Dashboard</CardDescription>
+          <CardTitle className="text-2xl font-bold">
+            {activeTab === "student" ? "Student Login" : "Admin Login"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">UID</Label>
               <Input
                 id="username"
                 type="text"
@@ -74,7 +105,13 @@ export default function AdminLogin() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-          <div className="mt-4 text-sm text-muted-foreground text-center">Demo credentials: admin / admin123</div>
+
+          {/* Demo credentials */}
+          <div className="mt-4 text-sm text-muted-foreground text-center">
+            {activeTab === "student"
+              ? "Demo credentials: student / student123"
+              : "Demo credentials: admin / admin123"}
+          </div>
         </CardContent>
       </Card>
     </div>
